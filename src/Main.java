@@ -30,15 +30,27 @@ public class Main {
 			String alphabets = br.readLine();
 			ArrayList<ArrayList<Float>> scoringMatrix = parseScoringMatrix(scoringMatrixFile);
 			
-			
-			
-//			float gapPenalty = -1;
-//			float[][] scoringMatrix = {{1,-1,-1,-1}, {-1,1,-1,-1}, {-1,-1,1,-1}, {-1,-1,-1,1}};
-//			String alphabets = "ACGT";
 			SequenceAlignment sa = new SequenceAlignment(gapPenalty, scoringMatrix, alphabets);
 			System.out.println(sa.dovetailAlignment(queries.get(0), database.get(0)));
 			
+			ArrayList<Float> result = new ArrayList<Float>();
+			int count = 0;
+			for (int i = 0; i < queries.size(); i++) {
+				for (int j = 0; j < database.size(); j++) {
+					if (algoId == 1) {
+						result.add(sa.globalAlignment(queries.get(i), database.get(j)));
+					} else if (algoId == 2) {
+						result.add(sa.localAlignment(queries.get(i), database.get(j)));
+					} else if (algoId == 3) {
+						result.add(sa.dovetailAlignment(queries.get(i), database.get(j)));
+					}
+					count++;
+				}
+			}
 			
+			Collections.sort(result, Collections.reverseOrder());
+			for (int i = 0; i < topK; i++)
+				System.out.println(result.get(i));
 			
 		} catch (Exception e) {
 			System.out.println("Unknown error occured");
