@@ -2,13 +2,17 @@ import java.util.*;
 public class SequenceAlignment {
 	
 	float gapPenalty;
-	float[][] scoringMatrix;
+	ArrayList<ArrayList<Float>> scoringMatrix;
 	String alphabets;
+	HashMap<Character, Integer> alphabetsMap = new HashMap<Character, Integer>();
 	
-	SequenceAlignment(float gapPenalty, float[][] scoringMatrix, String alphabets) {
+	SequenceAlignment(float gapPenalty, ArrayList<ArrayList<Float>> scoringMatrix, String alphabets) {
 		this.gapPenalty = gapPenalty;
 		this.scoringMatrix = scoringMatrix;
 		this.alphabets = alphabets;
+		for (int i = 0; i < alphabets.length(); i++) {
+			this.alphabetsMap.put(alphabets.charAt(i), i);
+		}
 	}
 	
 	public float globalAlignment(String str1, String str2) {
@@ -123,7 +127,7 @@ public class SequenceAlignment {
 	}
 	
 	float replacementPenalty(char c1, char c2) {
-		return this.scoringMatrix[alphabets.indexOf(c1)][alphabets.indexOf(c2)];
+		return this.scoringMatrix.get(alphabetsMap.get(c1)).get(alphabetsMap.get(c2));
 	}
 	
 	void findGlobalAlignment(String seq1, String seq2, float[][] memoTable) {
